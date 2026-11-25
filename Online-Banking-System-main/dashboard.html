@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Online Banking</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <!-- Decorative background blobs -->
+    <div class="bg-shape shape1"></div>
+    <div class="bg-shape shape2"></div>
+    <div class="bg-shape shape3"></div>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="navbar-brand">
+            <i class="lucide" data-lucide="wallet"></i>
+            <h2>Online Banking</h2>
+        </div>
+        <div class="nav-right">
+            <!-- Digital Clock -->
+            <div class="clock-container">
+                <i class="lucide" data-lucide="clock"></i>
+                <span id="liveClock">00:00:00 AM</span>
+            </div>
+            
+            <!-- Notification Bell -->
+            <div class="notification-bell" onclick="toggleNotifications(event)">
+                <i class="lucide" data-lucide="bell"></i>
+                <span id="notifBadge">0</span>
+                
+                <!-- Dropdown -->
+                <div class="notif-dropdown" id="notifDropdown" onclick="event.stopPropagation()">
+                    <div class="notif-header">
+                        <h4>Notifications</h4>
+                        <span onclick="clearNotifications()">Clear All</span>
+                    </div>
+                    <div class="notif-body" id="notifMessages">
+                        <!-- Dynamic Notifications -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Theme Toggle -->
+            <button class="theme-toggle-btn" onclick="toggleDarkMode()">
+                <i class="lucide" data-lucide="moon"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN LAYOUT -->
+    <div class="main-layout">
+        
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-profile">
+                <div class="profile-img-container">
+                    <img src="" class="profile-img" alt="Profile">
+                    <div class="profile-img-badge"></div>
+                </div>
+                <h3 id="profileName">Amit Parmar</h3>
+                <p id="profileAcc">ACC20394857</p>
+            </div>
+            
+            <p class="sidebar-menu-title">Menu</p>
+            <ul>
+                <li class="active" onclick="showSection('dashboard-section')">
+                    <i class="lucide" data-lucide="layout-dashboard"></i>
+                    <span>Dashboard</span>
+                </li>
+                <li onclick="showSection('transaction-section')">
+                    <i class="lucide" data-lucide="history"></i>
+                    <span>Transactions</span>
+                </li>
+                <li onclick="showSection('transfer-section')">
+                    <i class="lucide" data-lucide="send"></i>
+                    <span>Transfer</span>
+                </li>
+                <li onclick="showSection('profile-section')">
+                    <i class="lucide" data-lucide="user"></i>
+                    <span>Profile</span>
+                </li>
+                <li onclick="showSection('settings-section')">
+                    <i class="lucide" data-lucide="settings"></i>
+                    <span>Settings</span>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <button class="logout-btn-sidebar" onclick="logoutUser()">
+                    <i class="lucide" data-lucide="log-out"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- DASHBOARD BODY CONTAINER -->
+        <div class="dashboard">
+            
+            <!-- WELCOME HEADER -->
+            <div class="welcome-header">
+                <div>
+                    <h1 id="welcome">Welcome, Amit</h1>
+                    <p>Manage your transactions and monitor savings seamlessly</p>
+                </div>
+            </div>
+
+            <!-- DASHBOARD SECTION -->
+            <div id="dashboard-section" class="section-container">
+                <div style="display: flex; flex-direction: column; gap: 30px;">
+                    
+                    <!-- TOP METRICS GRID -->
+                    <div class="top-metrics-row">
+                        <!-- Balance Box -->
+                        <div class="glass-card balance-box">
+                            <div class="balance-header">
+                                <span>Current Balance</span>
+                                <i class="lucide" data-lucide="wallet"></i>
+                            </div>
+                            <div class="balance-amount-container">
+                                <h1 id="balance">₹50,000</h1>
+                            </div>
+                            <div class="balance-actions">
+                                <button class="btn-primary-action" onclick="depositMoney()">
+                                    <i class="lucide" data-lucide="plus-circle"></i> Deposit
+                                </button>
+                                <button class="btn-primary-action" onclick="withdrawMoney()">
+                                    <i class="lucide" data-lucide="minus-circle"></i> Withdraw
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Credit Card -->
+                        <div class="credit-card">
+                            <div class="card-inner">
+                                <!-- Card Front -->
+                                <div class="card-front">
+                                    <div class="card-chip-row">
+                                        <div class="chip-img"></div>
+                                        <i class="lucide" data-lucide="contactless" style="font-size: 24px; opacity: 0.8;"></i>
+                                    </div>
+                                    <div>
+                                        <h3>ONLINE BANK</h3>
+                                        <h2 id="cardNumberDisplay">**** **** **** 2045</h2>
+                                    </div>
+                                    <div class="card-holder-row">
+                                        <div class="card-holder-info">
+                                            <label>Card Holder</label>
+                                            <p id="cardHolderName">Amit Parmar</p>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <i class="lucide" data-lucide="circle-dot" style="font-size: 28px; color: var(--accent);"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Card Back -->
+                                <div class="card-back">
+                                    <div class="card-back-strip"></div>
+                                    <div class="card-back-cvv">456</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MID GRID: LIVE COUNTER & BUDGET TRACKER -->
+                    <div class="mid-widgets-row">
+                        <!-- Live Counter -->
+                        <div class="glass-card">
+                            <div class="widget-header">
+                                <h3><i class="lucide" data-lucide="activity"></i> Activity Overview</h3>
+                            </div>
+                            <div class="live-counter-grid">
+                                <div class="mini-stat-card">
+                                    <label>Total Transactions</label>
+                                    <h2 id="totalTransactions">0</h2>
+                                </div>
+                                <div class="mini-stat-card">
+                                    <label>Account Status</label>
+                                    <h2 style="color: var(--success); font-size: 18px; margin-top: 5px;">Active</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Budget Limits -->
+                        <div class="glass-card">
+                            <div class="widget-header">
+                                <h3><i class="lucide" data-lucide="piggy-bank"></i> Monthly Budget Limit</h3>
+                                <span id="budgetSpentText" style="font-weight: 700;">₹0</span>
+                            </div>
+                            <div class="budget-progress-container">
+                                <div class="progress-bar-bg">
+                                    <div id="budgetProgressBarFill" class="progress-bar-fill"></div>
+                                </div>
+                                <div class="budget-stats">
+                                    <span>Spent out of <strong id="budgetLimitText">₹20,000</strong></span>
+                                </div>
+                                <div id="budgetWarningText" class="budget-info-text">
+                                    Monthly spend tracker is active
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ANALYTICS GRID -->
+                    <div class="analytics-box">
+                        <!-- Deposit card -->
+                        <div class="analytics-card deposit-card">
+                            <div class="analytics-icon-circle">
+                                <i class="lucide" data-lucide="arrow-down-left"></i>
+                            </div>
+                            <div class="analytics-info">
+                                <label>Total Deposits</label>
+                                <h2 id="totalDepositsText">₹12,000</h2>
+                            </div>
+                        </div>
+
+                        <!-- Withdraw card -->
+                        <div class="analytics-card withdraw-card">
+                            <div class="analytics-icon-circle">
+                                <i class="lucide" data-lucide="arrow-up-right"></i>
+                            </div>
+                            <div class="analytics-info">
+                                <label>Total Withdrawals</label>
+                                <h2 id="totalWithdrawalsText">₹5,000</h2>
+                            </div>
+                        </div>
+
+                        <!-- Transfer card -->
+                        <div class="analytics-card transfer-card">
+                            <div class="analytics-icon-circle">
+                                <i class="lucide" data-lucide="send"></i>
+                            </div>
+                            <div class="analytics-info">
+                                <label>Total Transfers</label>
+                                <h2 id="totalTransfersText">₹3,000</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BOTTOM GRID: GRAPH & ACTIVITY TIMELINE -->
+                    <div class="bottom-widgets-row">
+                        <!-- Chart container -->
+                        <div class="glass-card">
+                            <div class="widget-header graph-header">
+                                <h3><i class="lucide" data-lucide="bar-chart-3"></i> Financial Summary</h3>
+                                <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">Deposits vs Expenses</span>
+                            </div>
+                            <div style="height: 300px; position: relative;">
+                                <canvas id="miniChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Timeline activity -->
+                        <div class="glass-card">
+                            <div class="widget-header recent-activity-title">
+                                <h3><i class="lucide" data-lucide="clock"></i> Recent Activity</h3>
+                            </div>
+                            <div id="timeline" class="timeline-box">
+                                <!-- Dynamic entries -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRANSACTION SECTION -->
+            <div id="transaction-section" class="section-container hidden-section">
+                <div class="glass-card">
+                    <div class="transactions-header">
+                        <h2>Transaction History</h2>
+                        <div class="search-box-container">
+                            <i class="lucide" data-lucide="search"></i>
+                            <input type="text" id="searchInput" placeholder="Search transactions by text...">
+                        </div>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table id="transaction-table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Details</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dynamic entries -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRANSFER SECTION -->
+            <div id="transfer-section" class="section-container hidden-section">
+                <div class="glass-card" style="max-width: 650px; margin: 0 auto;">
+                    <div class="widget-header" style="margin-bottom: 25px; border-bottom: 1px solid var(--border-card); padding-bottom: 15px;">
+                        <h2><i class="lucide" data-lucide="send" style="color: var(--primary); margin-right: 10px;"></i>Send Money</h2>
+                    </div>
+                    
+                    <div class="transfer-container">
+                        <div class="form-group">
+                            <label for="receiverName">Receiver Name</label>
+                            <div style="position: relative;">
+                                <input type="text" id="receiverName" placeholder="Enter recipient full name" required style="padding-left: 45px;">
+                                <i class="lucide" data-lucide="user" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); width: 18px;"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="receiverAmount">Amount</label>
+                            <div style="position: relative;">
+                                <input type="number" id="receiverAmount" placeholder="Enter transfer amount" required style="padding-left: 45px;">
+                                <i class="lucide" data-lucide="indian-rupee" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); width: 18px;"></i>
+                            </div>
+                        </div>
+
+                        <button class="btn-submit" onclick="transferMoney()" style="margin-top: 15px; width: 100%;">
+                            Initiate Transfer <i class="lucide" data-lucide="shield-check"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROFILE SECTION -->
+            <div id="profile-section" class="section-container hidden-section">
+                <div class="glass-card">
+                    <div class="profile-grid">
+                        
+                        <!-- Profile Card Left (Avatar selector) -->
+                        <div class="profile-card-left" style="border-right: 1px solid var(--border-card);">
+                            <div class="avatar-edit-overlay" onclick="openAvatarModal()">
+                                <div class="profile-img-container" style="width: 140px; height: 140px; padding: 5px;">
+                                    <img src="" class="profile-img" alt="Avatar">
+                                </div>
+                            </div>
+                            <h2 id="profileNameDisplay">User Profile</h2>
+                            <p>Click avatar image to change picture</p>
+                            
+                            <div style="width: 100%; text-align: left; margin-top: 25px; display: flex; flex-direction: column; gap: 12px; background: var(--bg-app); padding: 20px; border-radius: var(--border-radius-md); border: 1px solid var(--border-card);">
+                                <div style="display: flex; justify-content: space-between; font-size: 14px;">
+                                    <span style="color: var(--text-secondary); font-weight: 500;">Account Number:</span>
+                                    <strong id="profileAccNum" style="font-family: monospace;">ACC20394857</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 14px;">
+                                    <span style="color: var(--text-secondary); font-weight: 500;">Registered Email:</span>
+                                    <strong id="profileEmailDisplay">amit@gmail.com</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Profile Settings Form Right -->
+                        <div class="profile-card-right">
+                            <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 10px;">Update Profile Details</h2>
+                            
+                            <div class="form-group">
+                                <label for="newName">Change Username</label>
+                                <input type="text" id="newName" placeholder="Modify name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="newPassword">Change Password</label>
+                                <input type="password" id="newPassword" placeholder="Enter new password (optional)">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="newLimit">Monthly Spend Limit</label>
+                                <input type="number" id="newLimit" placeholder="Change limit threshold">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="currencySelect">Preferred Currency</label>
+                                <select id="currencySelect">
+                                    <option value="₹">₹ INR (Indian Rupee)</option>
+                                    <option value="$">$ USD (US Dollar)</option>
+                                    <option value="€">€ EUR (Euro)</option>
+                                    <option value="£">£ GBP (British Pound)</option>
+                                </select>
+                            </div>
+
+                            <button class="btn-submit" onclick="saveProfileSettings()" style="align-self: flex-start; margin-top: 10px;">
+                                Save Account Settings <i class="lucide" data-lucide="check"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SETTINGS SECTION (Links straight to profile settings panel for unified experience) -->
+            <div id="settings-section" class="section-container hidden-section">
+                <div class="glass-card" style="text-align: center; max-width: 600px; margin: 0 auto; padding: 40px;">
+                    <i class="lucide" data-lucide="shield-alert" style="width: 48px; height: 48px; color: var(--primary); margin-bottom: 20px;"></i>
+                    <h2>Unified Settings Console</h2>
+                    <p style="color: var(--text-secondary); margin: 15px 0 25px 0; font-size: 15px; line-height: 1.5;">To keep your experience simple and secured, currency choices, password modifications, name changes, and limit settings are managed dynamically within your Profile Card.</p>
+                    <button class="btn-submit" onclick="showSection('profile-section')">
+                        Go to Profile Config <i class="lucide" data-lucide="arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- OTP VERIFICATION MODAL -->
+    <div class="modal" id="otpModal">
+        <div class="modal-content otp-box">
+            <span class="close-btn" onclick="closeOtpModal()">&times;</span>
+            <i class="lucide" data-lucide="shield-check" style="width: 40px; height: 40px; color: var(--primary); margin-bottom: 10px;"></i>
+            <h2>Security Verification</h2>
+            <p style="color: var(--text-secondary); font-size: 14px;">Please enter the temporary confirmation code generated below to complete your transaction securely.</p>
+            
+            <div class="otp-display" id="generatedOtp">000000</div>
+            
+            <div class="form-group" style="margin-bottom: 20px;">
+                <input type="text" id="otpInput" placeholder="Enter confirmation code" maxlength="6" style="text-align: center; font-size: 18px; letter-spacing: 2px;">
+            </div>
+            
+            <button class="btn-submit" onclick="verifyOtp()" style="width: 100%;">
+                Confirm Payment <i class="lucide" data-lucide="check"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- AVATAR SELECTION GALLERY MODAL -->
+    <div class="modal" id="avatarModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAvatarModal()">&times;</span>
+            <h2>Select Profile Image</h2>
+            <p style="color: var(--text-secondary); font-size: 14px; text-align: center; margin-top: -10px;">Choose a customized vector illustration for your banking profile card.</p>
+            <div class="avatar-grid" id="avatarGrid">
+                <!-- Javascript will load images here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFIER -->
+    <div id="toast">
+        <i class="lucide" data-lucide="info"></i>
+        <span>Success</span>
+    </div>
+
+    <!-- AI CHATBOT SYSTEM -->
+    <div class="ai-btn" onclick="toggleAiChat()">
+        <i class="lucide" data-lucide="bot"></i>
+    </div>
+
+    <div class="ai-chat" id="aiChat">
+        <div class="ai-header">
+            <div class="ai-header-title">
+                <i class="lucide" data-lucide="bot"></i>
+                <h4>AI Advisor</h4>
+            </div>
+            <i class="lucide close-ai" data-lucide="x" onclick="toggleAiChat()"></i>
+        </div>
+        <div class="ai-body" id="aiMessages">
+            <div class="ai-msg bot">
+                Hello! 👋 I am your AI Financial Advisor. Ask me anything about your balance, budgets, savings advice, or recent transaction history!
+            </div>
+        </div>
+        <div class="ai-input-wrapper">
+            <input type="text" id="aiInput" placeholder="Type a message...">
+            <button class="ai-send-btn" onclick="sendAiMessage()">
+                <i class="lucide" data-lucide="send" style="width: 18px; height: 18px;"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="script.js"></script>
+    <script>
+        // Set values that aren't hooked directly in script onload
+        document.addEventListener("DOMContentLoaded", () => {
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+            
+            // Sync labels in Profile left pane
+            if (currentUser) {
+                const pNameDisp = document.getElementById("profileNameDisplay");
+                if (pNameDisp) pNameDisp.innerText = currentUser.name;
+                const pEmailDisp = document.getElementById("profileEmailDisplay");
+                if (pEmailDisp) pEmailDisp.innerText = currentUser.email;
+                const pAccNum = document.getElementById("profileAccNum");
+                if (pAccNum) pAccNum.innerText = currentUser.accountNumber;
+            }
+        });
+    </script>
+</body>
+</html>
